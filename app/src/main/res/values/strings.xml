@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GnaviSearch</string>
+    <string name="send_button">送信</string>
 </resources>
