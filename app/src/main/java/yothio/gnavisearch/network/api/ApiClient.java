@@ -1,4 +1,4 @@
-package yothio.gnavisearch.network;
+package yothio.gnavisearch.network.api;
 
 import com.google.gson.GsonBuilder;
 
