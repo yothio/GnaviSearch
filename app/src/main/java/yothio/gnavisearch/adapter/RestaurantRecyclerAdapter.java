@@ -38,12 +38,13 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        holder.nameTextView.setText(list.get(position).getName());
+//        holder.nameTextView.setText(list.get(position).getRest().get(0).getName());
+//        holder.nameTextView.setText(list.get(position).getRest());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return list.size();
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder{

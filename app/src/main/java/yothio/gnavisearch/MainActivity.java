@@ -4,16 +4,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.EditText;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
+import yothio.gnavisearch.adapter.model.Restaurant;
+import yothio.gnavisearch.network.ApiClient;
+import yothio.gnavisearch.network.EscApiManager;
 
 public class MainActivity extends AppCompatActivity {
 
 
     @BindView(R.id.restaurant_recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.name_edit_text)
+    EditText nameEditText;
+
+    List<Restaurant> list = new ArrayList<>();
+
+
 
     private RecyclerView.Adapter adapter;
 
@@ -25,9 +41,15 @@ public class MainActivity extends AppCompatActivity {
 //        butterknifeの事前準備
         ButterKnife.bind(this);
 
-        adapter = new RestaurantRecyclerAdapter();
+//        adapter = new RestaurantRecyclerAdapter(list,getApplicationContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+    @OnClick(R.id.send_button)
+    void sendBtnClick(){
+        EscApiManager.getRestaurantList(nameEditText.getText().toString(),list);
+//        adapter.notifyDataSetChanged();
     }
 }
