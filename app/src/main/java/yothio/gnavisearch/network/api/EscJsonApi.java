@@ -5,6 +5,7 @@ import retrofit2.Callback;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import yothio.gnavisearch.model.SearchResponse;
+import yothio.gnavisearch.network.API_KEY;
 
 /**
  * Created by yocchi on 2017/11/13.
@@ -19,7 +20,7 @@ public class EscJsonApi {
 
 
     public void searchRestaurantForName(String name, Callback<SearchResponse> callback) {
-        Call<SearchResponse> call = service.searchName("b6a7071f10abcc2f6c94c14df171ed25", "大阪", "json");
+        Call<SearchResponse> call = service.searchName(API_KEY.API_KEY, "大阪", "json");
         call.enqueue(callback);
     }
 

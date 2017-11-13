@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import yothio.gnavisearch.R;
-import yothio.gnavisearch.model.SearchResponse.Rest;
+import yothio.gnavisearch.model.Rest;
 
 /**
  * Created by yocchi on 2017/11/10.

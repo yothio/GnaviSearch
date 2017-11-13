@@ -16,16 +16,17 @@ import butterknife.OnClick;
 import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
 import yothio.gnavisearch.network.api.EscApiManager;
 import yothio.gnavisearch.model.SearchResponse;
+import yothio.gnavisearch.model.Rest;
 
 public class MainActivity extends AppCompatActivity {
 
-//
-//    @BindView(R.id.restaurant_recycler_view)
-//    RecyclerView recyclerView;
+
+    @BindView(R.id.restaurant_recycler_view)
+    RecyclerView recyclerView;
     @BindView(R.id.name_edit_text)
     EditText nameEditText;
 
-    List<SearchResponse.Rest> list = new ArrayList<>();
+    List<Rest> list = new ArrayList<>();
 
     private RecyclerView.Adapter adapter;
 
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
 //        butterknifeの事前準備
         ButterKnife.bind(this);
 
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.restaurant_recycler_view);
+        Rest rest = new Rest();
+        rest.setName("test");
+        list.add(rest);
 
         adapter = new RestaurantRecyclerAdapter(this.list,this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -48,13 +51,9 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.send_button)
     void sendBtnClick(){
         EscApiManager.getRestaurants(nameEditText.getText().toString(), response -> {
-            this.list = response.getRest();
-            Log.d("MainActivity", "list.size():" + list.size());
+            list.clear();
+            list.addAll(response.getRest());
             adapter.notifyItemChanged(0);
-            for (SearchResponse.Rest rest: response.getRest()){
-                Log.d("MainActivity", rest.getName());
-            }
         });
-//        adapter.notifyDataSetChanged();
     }
 }

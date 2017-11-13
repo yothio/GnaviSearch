@@ -24,14 +24,4 @@ public class SearchResponse{
     @SerializedName("rest")
     List<Rest> rest;
 
-    @Getter
-    @Setter
-    public class Rest {
-
-        @SerializedName("name")
-        String name;
-        @SerializedName("address")
-        String address;
-
-    }
 }
