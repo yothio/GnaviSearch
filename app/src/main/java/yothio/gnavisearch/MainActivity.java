@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+        
     }
 
     @OnClick(R.id.send_button)
@@ -53,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
         EscApiManager.getRestaurants(nameEditText.getText().toString(), response -> {
             list.clear();
             list.addAll(response.getRest());
+
+            for (Rest item:response.getRest()){
+                Log.d("MainActivity", "item:" + item.getName());
+            }
+            for (Rest item:list){
+                Log.d("MainActivity", item.getName());
+            }
             adapter.notifyItemChanged(0);
         });
     }
