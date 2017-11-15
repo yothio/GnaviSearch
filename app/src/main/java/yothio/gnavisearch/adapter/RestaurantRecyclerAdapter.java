@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -20,10 +23,14 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
 
     List<Rest> list;
     LayoutInflater layoutInflater;
+    Context context;
+    ItemClickCallback callback;
 
-    public RestaurantRecyclerAdapter(List<Rest> list, Context context){
+    public RestaurantRecyclerAdapter(List<Rest> list, Context context,ItemClickCallback callback){
         this.list = list;
         layoutInflater = LayoutInflater.from(context);
+        this.context = context;
+        this.callback = callback;
     }
 
     @Override
@@ -35,9 +42,15 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
 
     @Override
     public void onBindViewHolder(RestaurantViewHolder holder, int position) {
-        holder.nameTextView.setText(list.get(position).getName());
-    }
 
+        holder.nameTextView.setText(list.get(position).getName());
+//        画像の結びつけ
+            Picasso.with(context).load(list.get(position).getImageUrl().getImageUrl1()).into(holder.shopImage);
+
+        holder.itemView.setOnClickListener(view ->{
+            callback.callback(position);
+        });
+    }
     @Override
     public int getItemCount() {
         return list.size();
@@ -46,11 +59,13 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
     class RestaurantViewHolder extends RecyclerView.ViewHolder{
 
         TextView nameTextView;
+        ImageView shopImage;
 
         public RestaurantViewHolder(View itemView) {
             super(itemView);
 
             nameTextView = itemView.findViewById(R.id.name_text_view);
+            shopImage = itemView.findViewById(R.id.shop_image);
         }
     }
 }
