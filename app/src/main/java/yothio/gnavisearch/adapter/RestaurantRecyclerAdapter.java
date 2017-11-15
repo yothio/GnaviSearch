@@ -21,10 +21,10 @@ import yothio.gnavisearch.model.Rest;
 
 public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRecyclerAdapter.RestaurantViewHolder> {
 
-    List<Rest> list;
-    LayoutInflater layoutInflater;
-    Context context;
-    ItemClickCallback callback;
+    private List<Rest> list;
+    private LayoutInflater layoutInflater;
+    private Context context;
+    private ItemClickCallback callback;
 
     public RestaurantRecyclerAdapter(List<Rest> list, Context context,ItemClickCallback callback){
         this.list = list;

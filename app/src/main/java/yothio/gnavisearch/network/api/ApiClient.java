@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import yothio.gnavisearch.util.Const;
 
 /**
  * Created by yocchi on 2017/11/13.

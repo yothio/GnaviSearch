@@ -20,6 +20,7 @@ import butterknife.OnClick;
 import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
 import yothio.gnavisearch.network.api.EscApiManager;
 import yothio.gnavisearch.model.Rest;
+import yothio.gnavisearch.util.Const;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new RestaurantRecyclerAdapter(this.list, this, position -> {
             Intent intent = new Intent(MainActivity.this,RestaurantDetailActivity.class);
-            intent.putExtra("test",list.get(position));
+            intent.putExtra(Const.INTENT_KEY,list.get(position));
             startActivity(intent);
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
