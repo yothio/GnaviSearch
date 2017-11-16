@@ -5,7 +5,7 @@
 
         <variable
             name="rest"
-            type="yothio.gnavisearch.model.Rest"/>
+            type="yothio.gnavisearch.adapter.RestaurantItem"/>
     </data>
 
     <ScrollView
