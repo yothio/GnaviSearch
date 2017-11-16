@@ -35,11 +35,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        butterknifeの事前準備
         ButterKnife.bind(this);
-
-
+//        recyclerViewのクリック処理をcallbackとして渡す
         adapter = new RestaurantRecyclerAdapter(this.list, this, position -> {
             Intent intent = new Intent(MainActivity.this, RestaurantDetailActivity.class);
-//            intent.putExtra(Const.INTENT_KEY,list.get(position));
+            intent.putExtra(Const.INTENT_KEY,list.get(position));
             startActivity(intent);
         });
 
@@ -57,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 RestaurantItem item = new RestaurantItem();
                 item.setImageUri(rest.getImageUrl().getImageUrl1());
                 item.setName(rest.getName());
+                item.setTel(rest.getTel());
+                item.setAddress(rest.getAddress());
+                item.setOpenTime(rest.getOpenTime());
                 list.add(item);
             }
             adapter.notifyItemChanged(0);

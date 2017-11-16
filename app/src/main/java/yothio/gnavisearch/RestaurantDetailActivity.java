@@ -18,6 +18,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityRestaurantDetailBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_restaurant_detail);
         binding.setRest(getIntent().getParcelableExtra(Const.INTENT_KEY));
-//        Picasso.with(this).load(binding.getRest().getImageUrl().getImageUrl1()).into(binding.restaurantImage);
+        Picasso.with(this).load(binding.getRest().getImageUri()).into(binding.restaurantImage);
     }
 }
