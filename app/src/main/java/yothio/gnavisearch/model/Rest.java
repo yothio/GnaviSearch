@@ -57,6 +57,7 @@ public class Rest implements Parcelable {
         setAddress(in.readString());
         setTel(in.readString());
         setOpenTime(in.readString());
+//        setImageUrl(in.readParcelable(ImageUrl.ClassLoaderCreator));
     }
 
     public Rest() {
@@ -65,9 +66,29 @@ public class Rest implements Parcelable {
 
     @Getter
     @Setter
-    public class ImageUrl{
+    public class ImageUrl implements Parcelable{
         @SerializedName("shop_image1")
         String imageUrl1;
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+
+        }
+
+         final Parcelable.Creator<Rest> CREATOR
+                = new Parcelable.Creator<Rest>() {
+            public Rest createFromParcel(Parcel in) {
+                return new Rest(in);
+            }
+
+            public Rest[] newArray(int size) {
+                return new Rest[size];
+            }
+        };
     }
 }
