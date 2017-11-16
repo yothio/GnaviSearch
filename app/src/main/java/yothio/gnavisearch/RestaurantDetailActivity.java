@@ -9,7 +9,6 @@ import android.util.Log;
 import com.squareup.picasso.Picasso;
 
 import yothio.gnavisearch.databinding.ActivityRestaurantDetailBinding;
-import yothio.gnavisearch.model.Rest;
 import yothio.gnavisearch.util.Const;
 
 public class RestaurantDetailActivity extends AppCompatActivity {

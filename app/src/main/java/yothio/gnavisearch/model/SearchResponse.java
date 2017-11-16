@@ -1,5 +1,8 @@
 package yothio.gnavisearch.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -24,4 +27,30 @@ public class SearchResponse{
     @SerializedName("rest")
     List<Rest> rest;
 
+    @Getter
+    @Setter
+    public class Rest{
+        @SerializedName("name")
+        String name;
+        @SerializedName("address")
+        String address;
+        @SerializedName("image_url")
+        ImageUrl imageUrl;
+        @SerializedName("tel")
+        String tel;
+        @SerializedName("opentime")
+        String openTime;
+        @SerializedName("holiday")
+        String holiday;
+        @SerializedName("budget")
+        String budget;
+
+        @Getter
+        @Setter
+        public  class ImageUrl{
+            @SerializedName("shop_image1")
+            String imageUrl1;
+
+        }
+    }
 }

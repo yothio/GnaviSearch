@@ -1,14 +1,11 @@
 package yothio.gnavisearch;
 
 import android.content.Intent;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -17,9 +14,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import yothio.gnavisearch.adapter.RestaurantItem;
 import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
+import yothio.gnavisearch.model.SearchResponse;
 import yothio.gnavisearch.network.api.EscApiManager;
-import yothio.gnavisearch.model.Rest;
 import yothio.gnavisearch.util.Const;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     @BindView(R.id.name_edit_text)
     EditText nameEditText;
-    List<Rest> list = new ArrayList<>();
+    List<RestaurantItem> list = new ArrayList<>();
     private RecyclerView.Adapter adapter;
 
     @Override
@@ -40,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         adapter = new RestaurantRecyclerAdapter(this.list, this, position -> {
-            Intent intent = new Intent(MainActivity.this,RestaurantDetailActivity.class);
-            intent.putExtra(Const.INTENT_KEY,list.get(position));
+            Intent intent = new Intent(MainActivity.this, RestaurantDetailActivity.class);
+//            intent.putExtra(Const.INTENT_KEY,list.get(position));
             startActivity(intent);
         });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -54,7 +53,12 @@ public class MainActivity extends AppCompatActivity {
     void sendBtnClick() {
         EscApiManager.getRestaurants(nameEditText.getText().toString(), response -> {
             list.clear();
-            list.addAll(response.getRest());
+            for (SearchResponse.Rest rest : response.getRest()) {
+                RestaurantItem item = new RestaurantItem();
+                item.setImageUri(rest.getImageUrl().getImageUrl1());
+                item.setName(rest.getName());
+                list.add(item);
+            }
             adapter.notifyItemChanged(0);
         });
     }

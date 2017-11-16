@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import yothio.gnavisearch.R;
-import yothio.gnavisearch.model.Rest;
+import yothio.gnavisearch.model.SearchResponse;
 
 /**
  * Created by yocchi on 2017/11/10.
@@ -21,12 +21,12 @@ import yothio.gnavisearch.model.Rest;
 
 public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRecyclerAdapter.RestaurantViewHolder> {
 
-    private List<Rest> list;
+    private List<RestaurantItem> list;
     private LayoutInflater layoutInflater;
     private Context context;
     private ItemClickCallback callback;
 
-    public RestaurantRecyclerAdapter(List<Rest> list, Context context,ItemClickCallback callback){
+    public RestaurantRecyclerAdapter(List<RestaurantItem> list, Context context, ItemClickCallback callback){
         this.list = list;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
@@ -45,8 +45,7 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
 
         holder.nameTextView.setText(list.get(position).getName());
 //        画像の結びつけ
-            Picasso.with(context).load(list.get(position).getImageUrl().getImageUrl1()).into(holder.shopImage);
-
+        Picasso.with(context).load(list.get(position).getImageUri()).into(holder.shopImage);
         holder.itemView.setOnClickListener(view ->{
             callback.callback(position);
         });
