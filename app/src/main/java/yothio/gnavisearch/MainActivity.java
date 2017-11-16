@@ -1,6 +1,8 @@
 package yothio.gnavisearch;
 
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,9 +39,14 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 //        recyclerViewのクリック処理をcallbackとして渡す
         adapter = new RestaurantRecyclerAdapter(this.list, this, position -> {
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    recyclerView.findViewById(R.id.shop_image),
+                    getString(R.string.restaurant_image) );
             Intent intent = new Intent(MainActivity.this, RestaurantDetailActivity.class);
             intent.putExtra(Const.INTENT_KEY,list.get(position));
-            startActivity(intent);
+//            startActivity(intent);
+            ActivityCompat.startActivity(MainActivity.this,intent,options.toBundle());
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
