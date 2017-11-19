@@ -1,4 +1,4 @@
-package yothio.gnavisearch;
+package yothio.gnavisearch.activity;
 
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +18,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import yothio.gnavisearch.R;
 import yothio.gnavisearch.adapter.RestaurantItem;
 import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
 import yothio.gnavisearch.model.SearchResponse;
