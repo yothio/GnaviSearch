@@ -26,6 +26,13 @@ public class RestaurantItem implements Parcelable {
     String holiday;
 //    ディナー価格
     String budget;
+//    最寄り電車系列
+    String accessLine;
+//    最寄り駅
+    String accessStation;
+//    駅からの徒歩時間
+    String accessWalk;
+
 
     public RestaurantItem(){
 
@@ -39,6 +46,9 @@ public class RestaurantItem implements Parcelable {
         imageUri = in.readString();
         holiday = in.readString();
         budget = in.readString();
+        accessLine = in.readString();
+        accessStation = in.readString();
+        accessWalk = in.readString();
     }
 
     public static final Creator<RestaurantItem> CREATOR = new Creator<RestaurantItem>() {
@@ -67,5 +77,8 @@ public class RestaurantItem implements Parcelable {
         parcel.writeString(imageUri);
         parcel.writeString(holiday);
         parcel.writeString(budget);
+        parcel.writeString(accessLine);
+        parcel.writeString(accessStation);
+        parcel.writeString(accessWalk);
     }
 }

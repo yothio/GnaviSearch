@@ -36,14 +36,17 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
     @Override
     public RestaurantViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = layoutInflater.inflate(R.layout.list_item_restaurant,parent, false);
-        RestaurantViewHolder viewHolder = new RestaurantViewHolder(v);
-        return viewHolder;
+        return new RestaurantViewHolder(v);
     }
-
+//        リストアイテムとの結びつけ
     @Override
     public void onBindViewHolder(RestaurantViewHolder holder, int position) {
 
         holder.nameTextView.setText(list.get(position).getName());
+//        アクセスについての詳細があるかチェック
+        if(list.get(position).getAccessLine() != null) {
+            holder.accessTextView.setText(list.get(position).getAccessLine() + list.get(position).getAccessStation() + "より、徒歩" + list.get(position).getAccessWalk());
+        }
 //        画像の結びつけ
         Picasso.with(context).load(list.get(position).getImageUri()).into(holder.shopImage);
         holder.itemView.setOnClickListener(view ->{
@@ -57,14 +60,17 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
 
     class RestaurantViewHolder extends RecyclerView.ViewHolder{
 
+        TextView accessTextView;
         TextView nameTextView;
         ImageView shopImage;
 
-        public RestaurantViewHolder(View itemView) {
+
+        RestaurantViewHolder(View itemView) {
             super(itemView);
 
             nameTextView = itemView.findViewById(R.id.name_text_view);
             shopImage = itemView.findViewById(R.id.shop_image);
+            accessTextView = itemView.findViewById(R.id.access_text_view);
         }
     }
 }

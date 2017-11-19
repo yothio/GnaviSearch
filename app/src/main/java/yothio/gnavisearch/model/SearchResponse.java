@@ -39,17 +39,31 @@ public class SearchResponse{
         @SerializedName("tel")
         String tel;
         @SerializedName("opentime")
-        String openTime;
+        Object openTime;
         @SerializedName("holiday")
-        String holiday;
+        Object holiday;
         @SerializedName("budget")
-        String budget;
+        Object budget;
+        @SerializedName("access")
+        Access access;
 
         @Getter
         @Setter
-        public  class ImageUrl{
+        public class ImageUrl{
             @SerializedName("shop_image1")
-            String imageUrl1;
+            Object imageUrl1;
+
+        }
+
+        @Getter
+        @Setter
+        public class Access{
+            @SerializedName("line")
+            Object line;
+            @SerializedName("station")
+            Object station;
+            @SerializedName("walk")
+            Object walk;
 
         }
     }
