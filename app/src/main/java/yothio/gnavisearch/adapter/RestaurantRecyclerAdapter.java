@@ -38,12 +38,15 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
         View v = layoutInflater.inflate(R.layout.list_item_restaurant,parent, false);
         return new RestaurantViewHolder(v);
     }
-
+//        リストアイテムとの結びつけ
     @Override
     public void onBindViewHolder(RestaurantViewHolder holder, int position) {
 
         holder.nameTextView.setText(list.get(position).getName());
-        holder.accessTextView.setText(list.get(position).getAccessLine() + list.get(position).getAccessStation() + "より、徒歩" + list.get(position).getAccessWalk());
+//        アクセスについての詳細があるかチェック
+        if(list.get(position).getAccessLine() != null) {
+            holder.accessTextView.setText(list.get(position).getAccessLine() + list.get(position).getAccessStation() + "より、徒歩" + list.get(position).getAccessWalk());
+        }
 //        画像の結びつけ
         Picasso.with(context).load(list.get(position).getImageUri()).into(holder.shopImage);
         holder.itemView.setOnClickListener(view ->{

@@ -36,8 +36,9 @@ public class EscApiManager {
             }
         });
     }
-    public static void getRestaurants(String name,int i, final EscApiCallback<SearchResponse> callback) {
-        getEscJsonApi().searchRestaurantForName(name, i,new Callback<SearchResponse>() {
+    public static void getRestaurantsForRange(int i,float latitude,float longitude,final EscApiCallback<SearchResponse> callback) {
+        Log.d("EscApiManager", "i:" + i);
+        getEscJsonApi().searchRestaurantForRange(i,latitude,longitude,new Callback<SearchResponse>() {
 
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {

@@ -24,8 +24,13 @@ class EscJsonApi {
         call.enqueue(callback);
     }
 
-    void searchRestaurantForName(String name, int i,Callback<SearchResponse> callback) {
-        Call<SearchResponse> call = service.searchName(API_KEY.API_KEY,i, "大阪", "json");
+//    void searchRestaurantForName(String name, int i,Callback<SearchResponse> callback) {
+//        Call<SearchResponse> call = service.searchName(API_KEY.API_KEY,i, "大阪", "json");
+//        call.enqueue(callback);
+//    }
+
+    void searchRestaurantForRange(int areaRangeIndex,float latitude,float longitude,Callback<SearchResponse> callback){
+        Call<SearchResponse> call = service.searchArea(API_KEY.API_KEY,areaRangeIndex,latitude,longitude,"json");
         call.enqueue(callback);
     }
 
@@ -33,11 +38,10 @@ class EscJsonApi {
         @GET(".")
         Call<SearchResponse> searchName(@Query("keyid") String key, @Query("name") String name, @Query("format") String format);
         @GET(".")
-        Call<SearchResponse> searchName(@Query("keyid") String key,
+        Call<SearchResponse> searchArea(@Query("keyid") String key,
                                         @Query("range") int areaRange,
-                                        @Query("latitude") int latitude,
-                                        @Query("longitude") int longitude,
-                                        @Query("name") String name,
+                                        @Query("latitude") float latitude,
+                                        @Query("longitude") float longitude,
                                         @Query("format") String format);
     }
 

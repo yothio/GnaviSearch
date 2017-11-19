@@ -1,6 +1,5 @@
 package yothio.gnavisearch;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -11,10 +10,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     List<RestaurantItem> list = new ArrayList<>();
     private RecyclerView.Adapter adapter;
+    String dummyImageUrl = "http://androck.jp/wp-content/uploads/file/apps/ICON/1/140.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,29 +86,38 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.setTitle(R.string.search_area_text);
 
         // 表示アイテムを指定する //
-        String[] items = {"300m","500m","1000m","2000m","3000m"};
+        String[] items = {"300m", "500m", "1000m", "2000m", "3000m"};
 
         dialogBuilder.setItems(items, (dialogInterface, selectItemIndex) ->
-                EscApiManager.getRestaurants("test",selectItemIndex, response -> {
-            list.clear();
-            for (SearchResponse.Rest rest : response.getRest()) {
-                RestaurantItem item = new RestaurantItem();
-                item.setImageUri(rest.getImageUrl().getImageUrl1());
-                item.setName(rest.getName());
-                item.setTel(rest.getTel());
-                item.setAddress(rest.getAddress());
-                item.setOpenTime(rest.getOpenTime());
-
-                item.setAccessLine(rest.getAccess().getLine());
-                item.setAccessStation(rest.getAccess().getStation());
-                item.setAccessWalk(rest.getAccess().getWalk());
-                list.add(item);
-            }
-            adapter.notifyItemChanged(0);
-        }));
+//                自身の周りから一定距離を検索する
+                EscApiManager.getRestaurantsForRange(selectItemIndex, 34.700387f, 135.4906603f, response -> {
+                    list.clear();
+                    for (SearchResponse.Rest rest : response.getRest()) {
+                        list.add(convertResponseItem(rest));
+                    }
+                    adapter.notifyItemChanged(0);
+                }));
 
         dialogBuilder.create().show();
 
+    }
+//    リストに追加するアイテムの一部を変換する
+    private RestaurantItem convertResponseItem(SearchResponse.Rest rest) {
+        RestaurantItem item = new RestaurantItem();
+//        空の場合はダミーurlに変更
+        item.setImageUri(Objects.equals(rest.getImageUrl().getImageUrl1().toString(), "{}") ? dummyImageUrl : rest.getImageUrl().getImageUrl1().toString());
+        item.setName(rest.getName());
+        item.setTel(rest.getTel());
+        item.setAddress(rest.getAddress());
+//        空の場合は文字列を追加
+        item.setOpenTime(Objects.equals(rest.getOpenTime().toString(), "{}") ? "詳細はありません" : rest.getOpenTime().toString());
+//        アクセスが空の場合は最寄り駅なども省くためのチェック
+        if (!Objects.equals(rest.getAccess().getLine().toString(), "{}")) {
+            item.setAccessLine(rest.getAccess().getLine().toString());
+            item.setAccessStation(rest.getAccess().getStation().toString());
+            item.setAccessWalk(rest.getAccess().getWalk().toString());
+        }
+        return item;
     }
 
 
