@@ -25,10 +25,14 @@
             >
 
             <ImageView
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:id="@+id/restaurant_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+
+                android:scaleType="fitStart"
                 android:src="@drawable/ic_launcher_background"
                 android:transitionName="@string/restaurant_image"/>
 

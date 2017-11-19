@@ -44,12 +44,26 @@ public class SearchResponse{
         String holiday;
         @SerializedName("budget")
         String budget;
+        @SerializedName("access")
+        Access access;
 
         @Getter
         @Setter
         public  class ImageUrl{
             @SerializedName("shop_image1")
             String imageUrl1;
+
+        }
+
+        @Getter
+        @Setter
+        public class Access{
+            @SerializedName("line")
+            String line;
+            @SerializedName("station")
+            String station;
+            @SerializedName("walk")
+            String walk;
 
         }
     }

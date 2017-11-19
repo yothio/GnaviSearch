@@ -2,4 +2,7 @@
     <string name="app_name">GnaviSearch</string>
     <string name="send_button">送信</string>
     <string name="restaurant_image">restaurant_transition_key</string>
+    <string name="test">test</string>
+    <string name="search_text">周辺の店舗を探す</string>
+    <string name="search_area_text">検索範囲を選択してください</string>
 </resources>

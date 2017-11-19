@@ -36,5 +36,21 @@ public class EscApiManager {
             }
         });
     }
+    public static void getRestaurants(String name,int i, final EscApiCallback<SearchResponse> callback) {
+        getEscJsonApi().searchRestaurantForName(name, i,new Callback<SearchResponse>() {
+
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                Log.d("EscApiManager", response.message());
+                callback.callback(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+                Log.d("EscApiManager", t.getMessage());
+
+            }
+        });
+    }
 
 }
