@@ -1,6 +1,8 @@
 package yothio.gnavisearch.activity;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +26,10 @@ import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
 import yothio.gnavisearch.model.SearchResponse;
 import yothio.gnavisearch.network.api.EscApiManager;
 import yothio.gnavisearch.util.Const;
+import yothio.gnavisearch.util.PermissionUtil;
+
+import static yothio.gnavisearch.util.Const.GPS_PERMISSIONS;
+import static yothio.gnavisearch.util.Const.GPS_REQUEST_CODE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        butterknifeの事前準備
         ButterKnife.bind(this);
+
 //        recyclerViewのクリック処理をcallbackとして渡す
         adapter = new RestaurantRecyclerAdapter(this.list, this, position -> {
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, recyclerView.findViewById(R.id.shop_image), getString(R.string.restaurant_image));
@@ -99,10 +106,27 @@ public class MainActivity extends AppCompatActivity {
                     adapter.notifyItemChanged(0);
                 }));
 
-        dialogBuilder.create().show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (PermissionUtil.hasSelfPermissions(this, GPS_PERMISSIONS)) {
+                dialogBuilder.create().show();
+            } else {
+                // 権限がない場合は、パーミッション確認アラートを表示する
+                requestPermissions(GPS_PERMISSIONS, GPS_REQUEST_CODE);
+            }
+        } else {
+            dialogBuilder.create().show();
+        }
 
     }
-//    リストに追加するアイテムの一部を変換する
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
+
+    //    リストに追加するアイテムの一部を変換する
     private RestaurantItem convertResponseItem(SearchResponse.Rest rest) {
         RestaurantItem item = new RestaurantItem();
 //        空の場合はダミーurlに変更
