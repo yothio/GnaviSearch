@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import yothio.gnavisearch.network.GpsManager;
 import yothio.gnavisearch.network.api.EscApiManager;
 import yothio.gnavisearch.util.Const;
 import yothio.gnavisearch.util.PermissionUtil;
+import yothio.gnavisearch.util.Session;
 
 import static yothio.gnavisearch.util.Const.GPS_PERMISSIONS;
 import static yothio.gnavisearch.util.Const.GPS_REQUEST_CODE;
@@ -52,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.findViewById(R.id.shop_image).setTransitionName("restaurant_transition_key");
             }
+            // 詳細画面用にセッションとして位置情報を保持
+            Session.getInstance().setUserLatitude(list.get(position).getLatitude());
+            Session.getInstance().setUserLongitude(list.get(position).getLongitude());
+            Log.d("MainActivity", "Session.getInstance().getUserLatitude():" + Session.getInstance().getUserLatitude());
+
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, getString(R.string.restaurant_image));
             Intent intent = new Intent(MainActivity.this, RestaurantDetailActivity.class);
             intent.putExtra(Const.INTENT_KEY, list.get(position));
@@ -151,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
             item.setAccessStation(rest.getAccess().getStation().toString());
             item.setAccessWalk(rest.getAccess().getWalk().toString());
         }
+        item.setLatitude(Double.parseDouble(rest.getLatitude()));
+        item.setLongitude(Double.parseDouble(rest.getLongitude()));
         return item;
     }
 }
