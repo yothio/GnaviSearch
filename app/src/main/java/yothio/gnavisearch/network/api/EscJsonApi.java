@@ -4,7 +4,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import yothio.gnavisearch.model.SearchResponse;
+import yothio.gnavisearch.network.model.SearchResponse;
 import yothio.gnavisearch.network.API_KEY;
 
 /**

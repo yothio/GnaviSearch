@@ -1,7 +1,4 @@
-package yothio.gnavisearch.model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package yothio.gnavisearch.network.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -46,6 +43,10 @@ public class SearchResponse{
         Object budget;
         @SerializedName("access")
         Access access;
+        @SerializedName("latitude")
+        String latitude;
+        @SerializedName("longitude")
+        String longitude;
 
         @Getter
         @Setter

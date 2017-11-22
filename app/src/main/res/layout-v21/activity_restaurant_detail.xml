@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
             name="rest"
             type="yothio.gnavisearch.adapter.RestaurantItem"/>
     </data>
+
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -21,14 +24,14 @@
             android:paddingRight="5dp">
 
             <ImageView
-                android:text="イメージがありません"
-                android:padding="10dp"
                 android:id="@+id/restaurant_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:padding="10dp"
                 android:scaleType="fitStart"
                 android:src="@drawable/ic_launcher_background"
+                android:text="イメージがありません"
                 android:transitionName="@string/restaurant_image"/>
 
             <LinearLayout
@@ -46,12 +49,12 @@
                     android:textSize="@dimen/text_size_medium"/>
 
                 <TextView
-                    android:paddingEnd="3dp"
-                    android:paddingStart="3dp"
-                    android:paddingTop="3dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
+                    android:paddingEnd="3dp"
+                    android:paddingStart="3dp"
+                    android:paddingTop="3dp"
                     android:text="@{rest.name}"
                     android:textSize="@dimen/text_size_small"/>
             </LinearLayout>
@@ -72,12 +75,12 @@
 
                 <TextView
 
-                    android:paddingEnd="3dp"
-                    android:paddingStart="3dp"
-                    android:paddingTop="3dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
+                    android:paddingEnd="3dp"
+                    android:paddingStart="3dp"
+                    android:paddingTop="3dp"
                     android:text="@{rest.tel}"
                     android:textSize="@dimen/text_size_small"/>
             </LinearLayout>
@@ -98,12 +101,12 @@
 
                 <TextView
 
-                    android:paddingEnd="3dp"
-                    android:paddingStart="3dp"
-                    android:paddingTop="3dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
+                    android:paddingEnd="3dp"
+                    android:paddingStart="3dp"
+                    android:paddingTop="3dp"
                     android:text="@{rest.address}"
                     android:textSize="@dimen/text_size_small"
                     />
@@ -124,16 +127,20 @@
                     android:textSize="@dimen/text_size_medium"/>
 
                 <TextView
-                    android:paddingEnd="3dp"
-                    android:paddingStart="3dp"
-                    android:paddingTop="3dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
+                    android:paddingEnd="3dp"
+                    android:paddingStart="3dp"
+                    android:paddingTop="3dp"
                     android:text="@{rest.openTime}"
                     android:textSize="@dimen/text_size_small"/>
             </LinearLayout>
-
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
         </LinearLayout>
     </ScrollView>
 </layout>
