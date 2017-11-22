@@ -21,7 +21,7 @@ import butterknife.OnClick;
 import yothio.gnavisearch.R;
 import yothio.gnavisearch.adapter.RestaurantItem;
 import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
-import yothio.gnavisearch.model.SearchResponse;
+import yothio.gnavisearch.network.model.SearchResponse;
 import yothio.gnavisearch.network.GpsManager;
 import yothio.gnavisearch.network.api.EscApiManager;
 import yothio.gnavisearch.util.Const;
@@ -42,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        butterknifeの事前準備
+        // butterKnifeの事前準備
         ButterKnife.bind(this);
-//        GPS関連のクラスのインスタンスの作成
+        // GPS関連のクラスのインスタンスの作成
         gpsManager = new GpsManager(this);
 
-//        recyclerViewのクリック処理をcallbackとして渡す
+        // recyclerViewのクリック処理をcallbackとして渡す
         adapter = new RestaurantRecyclerAdapter(this.list, this, (view, position) -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.findViewById(R.id.shop_image).setTransitionName("restaurant_transition_key");
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         String[] items = {"300m", "500m", "1000m", "2000m", "3000m"};
 
         dialogBuilder.setItems(items, (dialogInterface, selectItemIndex) ->
-//                自身の周りから一定距離を検索する
+                // 自身の周りから一定距離を検索する
                 EscApiManager.getRestaurantsForRange(selectItemIndex, latitude, longitude, response -> {
                     list.clear();
                     for (SearchResponse.Rest rest : response.getRest()) {
@@ -122,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
         // アラート表示中に画面回転すると length ０でコールバックされるのでガードする
         if (grantResults.length > 0 && requestCode == GPS_REQUEST_CODE) {
             if (!PermissionUtil.checkGrantResults(grantResults)) {
-//                今後確認しないにチェックが入っているか確認
+                // 今後確認しないにチェックが入っているか確認
                 if (!PermissionUtil.shouldShowRequestPermissionRationale(this, permissions, grantResults)) {
-//                    今後確認しないにチェックが入っている場合
+                    // 今後確認しないにチェックが入っている場合
                     PermissionUtil.showAlertDialog(getSupportFragmentManager());
                 }
             } else {
@@ -137,15 +137,15 @@ public class MainActivity extends AppCompatActivity {
     //    リストに追加するアイテムの一部を変換する
     private RestaurantItem convertResponseItem(SearchResponse.Rest rest) {
         RestaurantItem item = new RestaurantItem();
-//        空の場合はダミーurlに変更
+        // 空の場合はダミーurlに変更
         String dummyImageUrl = "http://androck.jp/wp-content/uploads/file/apps/ICON/1/140.png";
         item.setImageUri(Objects.equals(rest.getImageUrl().getImageUrl1().toString(), "{}") ? dummyImageUrl : rest.getImageUrl().getImageUrl1().toString());
         item.setName(rest.getName());
         item.setTel(rest.getTel());
         item.setAddress(rest.getAddress());
-//        空の場合は文字列を追加
+        // 空の場合は文字列を追加
         item.setOpenTime(Objects.equals(rest.getOpenTime().toString(), "{}") ? "詳細はありません" : rest.getOpenTime().toString());
-//        アクセスが空の場合は最寄り駅なども省くためのチェック
+        // アクセスが空の場合は最寄り駅なども省くためのチェック
         if (!Objects.equals(rest.getAccess().getLine().toString(), "{}")) {
             item.setAccessLine(rest.getAccess().getLine().toString());
             item.setAccessStation(rest.getAccess().getStation().toString());

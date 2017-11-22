@@ -14,7 +14,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import yothio.gnavisearch.R;
-import yothio.gnavisearch.model.SearchResponse;
 import yothio.gnavisearch.util.Convert;
 
 /**

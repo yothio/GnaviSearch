@@ -1,7 +1,4 @@
-package yothio.gnavisearch.model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package yothio.gnavisearch.network.model;
 
 import com.google.gson.annotations.SerializedName;
 

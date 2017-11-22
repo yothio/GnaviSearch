@@ -1,11 +1,9 @@
 package yothio.gnavisearch.network.api;
 
-import android.util.Log;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import yothio.gnavisearch.model.SearchResponse;
+import yothio.gnavisearch.network.model.SearchResponse;
 
 
 /**
