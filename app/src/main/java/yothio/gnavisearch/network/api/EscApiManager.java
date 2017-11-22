@@ -20,35 +20,27 @@ public class EscApiManager {
         if (escJsonApi == null) escJsonApi = new EscJsonApi();
         return escJsonApi;
     }
-    public static void getRestaurants(String name, final EscApiCallback<SearchResponse> callback) {
-        getEscJsonApi().searchRestaurantForName(name, new Callback<SearchResponse>() {
 
-            @Override
-            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-                Log.d("EscApiManager", response.message());
-                callback.callback(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<SearchResponse> call, Throwable t) {
-                Log.d("EscApiManager", t.getMessage());
-
-            }
-        });
-    }
-    public static void getRestaurantsForRange(int i,float latitude,float longitude,final EscApiCallback<SearchResponse> callback) {
-        Log.d("EscApiManager", "i:" + i);
+    /**
+     *
+     * @param i         自身の周囲の距離を選択したインデックスを渡す
+     * @param latitude  緯度
+     * @param longitude 軽度
+     * @param callback  通信完了後に行いたい処理
+     *
+     *                  Apiとの通信の部分と画面とを繋ぐマネージャメソッド
+     *                  必要に応じて大きくする
+     */
+    public static void getRestaurantsForRange(int i,double latitude,double longitude,final EscApiCallback<SearchResponse> callback) {
         getEscJsonApi().searchRestaurantForRange(i,latitude,longitude,new Callback<SearchResponse>() {
 
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-                Log.d("EscApiManager", response.message());
                 callback.callback(response.body());
             }
 
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
-                Log.d("EscApiManager", t.getMessage());
 
             }
         });

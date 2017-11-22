@@ -1,5 +1,6 @@
 package yothio.gnavisearch.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import yothio.gnavisearch.R;
 import yothio.gnavisearch.model.SearchResponse;
+import yothio.gnavisearch.util.Convert;
 
 /**
  * Created by yocchi on 2017/11/10.
@@ -39,18 +41,21 @@ public class RestaurantRecyclerAdapter extends RecyclerView.Adapter<RestaurantRe
         return new RestaurantViewHolder(v);
     }
 //        リストアイテムとの結びつけ
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RestaurantViewHolder holder, int position) {
 
         holder.nameTextView.setText(list.get(position).getName());
 //        アクセスについての詳細があるかチェック
         if(list.get(position).getAccessLine() != null) {
-            holder.accessTextView.setText(list.get(position).getAccessLine() + list.get(position).getAccessStation() + "より、徒歩" + list.get(position).getAccessWalk());
+            holder.accessTextView.setText(list.get(position).getAccessLine() +
+                                            list.get(position).getAccessStation() +
+                    Convert.accessTime(list.get(position).getAccessWalk())+"分");
         }
 //        画像の結びつけ
         Picasso.with(context).load(list.get(position).getImageUri()).into(holder.shopImage);
         holder.itemView.setOnClickListener(view ->{
-            callback.callback(position);
+            callback.callback(holder.shopImage,position);
         });
     }
     @Override

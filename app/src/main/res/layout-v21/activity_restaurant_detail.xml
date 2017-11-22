@@ -22,6 +22,7 @@
 
             <ImageView
                 android:text="イメージがありません"
+                android:padding="10dp"
                 android:id="@+id/restaurant_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

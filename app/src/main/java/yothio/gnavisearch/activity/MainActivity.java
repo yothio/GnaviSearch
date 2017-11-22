@@ -8,10 +8,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,7 @@ import yothio.gnavisearch.R;
 import yothio.gnavisearch.adapter.RestaurantItem;
 import yothio.gnavisearch.adapter.RestaurantRecyclerAdapter;
 import yothio.gnavisearch.model.SearchResponse;
+import yothio.gnavisearch.network.GpsManager;
 import yothio.gnavisearch.network.api.EscApiManager;
 import yothio.gnavisearch.util.Const;
 import yothio.gnavisearch.util.PermissionUtil;
@@ -34,10 +33,10 @@ import static yothio.gnavisearch.util.Const.GPS_REQUEST_CODE;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.restaurant_recycler_view)
-    RecyclerView recyclerView;
-    List<RestaurantItem> list = new ArrayList<>();
+     RecyclerView recyclerView;
+    private List<RestaurantItem> list = new ArrayList<>();
     private RecyclerView.Adapter adapter;
-    String dummyImageUrl = "http://androck.jp/wp-content/uploads/file/apps/ICON/1/140.png";
+    private GpsManager gpsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,50 +44,60 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        butterknifeの事前準備
         ButterKnife.bind(this);
+//        GPS関連のクラスのインスタンスの作成
+        gpsManager = new GpsManager(this);
 
 //        recyclerViewのクリック処理をcallbackとして渡す
-        adapter = new RestaurantRecyclerAdapter(this.list, this, position -> {
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, recyclerView.findViewById(R.id.shop_image), getString(R.string.restaurant_image));
+        adapter = new RestaurantRecyclerAdapter(this.list, this, (view, position) -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                view.findViewById(R.id.shop_image).setTransitionName("restaurant_transition_key");
+            }
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, getString(R.string.restaurant_image));
             Intent intent = new Intent(MainActivity.this, RestaurantDetailActivity.class);
             intent.putExtra(Const.INTENT_KEY, list.get(position));
             ActivityCompat.startActivity(MainActivity.this, intent, options.toBundle());
+
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                int totalCount = recyclerView.getAdapter().getItemCount(); //合計のアイテム数
-                int childCount = recyclerView.getChildCount(); // RecyclerViewに表示されてるアイテム数
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-
-                if (layoutManager instanceof GridLayoutManager) { // GridLayoutManager
-                    GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-                    int firstPosition = gridLayoutManager.findFirstVisibleItemPosition(); // RecyclerViewに表示されている一番上のアイテムポジション
-                    if (totalCount == childCount + firstPosition) {
-                        // ページング処理
-                        // GridLayoutManagerを指定している時のページング処理
-                    }
-                } else if (layoutManager instanceof LinearLayoutManager) { // LinearLayoutManager
-                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
-                    int firstPosition = linearLayoutManager.findFirstVisibleItemPosition(); // RecyclerViewの一番上に表示されているアイテムのポジション
-                    if (totalCount == childCount + firstPosition) {
-                        // ページング処理
-                        // LinearLayoutManagerを指定している時のページング処理
-                        Log.d("MainActivity", "ページング処理");
-                    }
-                }
-            }
-        });
     }
+
+    // 現在地取得中を管理するフラグ
+    private boolean alreadyGetGps = false;
 
     @OnClick(R.id.search_button)
     void sendBtnClick() {
+
+        if (alreadyGetGps){
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (PermissionUtil.hasSelfPermissions(this, GPS_PERMISSIONS)) {
+                alreadyGetGps =true;
+                // 現在地を取得して、ダイアログに反映
+                gpsManager.getLocation(location -> showRestaurantDialog(location.getLatitude(),location.getLongitude()));
+            } else {
+                // 権限がない場合は、パーミッション確認アラートを表示する
+                requestPermissions(GPS_PERMISSIONS, GPS_REQUEST_CODE);
+            }
+        } else {
+            alreadyGetGps =true;
+            // 現在地を取得して、ダイアログに反映
+            gpsManager.getLocation(location -> showRestaurantDialog(location.getLatitude(),location.getLongitude()));
+        }
+    }
+
+    /**
+     * 受け取った現在地からレストランを検索する
+     * @param latitude
+     * @param longitude
+     */
+    private void showRestaurantDialog(double latitude,double longitude) {
+
+        alreadyGetGps = false;
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle(R.string.search_area_text);
@@ -98,31 +107,30 @@ public class MainActivity extends AppCompatActivity {
 
         dialogBuilder.setItems(items, (dialogInterface, selectItemIndex) ->
 //                自身の周りから一定距離を検索する
-                EscApiManager.getRestaurantsForRange(selectItemIndex, 34.700387f, 135.4906603f, response -> {
+                EscApiManager.getRestaurantsForRange(selectItemIndex, latitude, longitude, response -> {
                     list.clear();
                     for (SearchResponse.Rest rest : response.getRest()) {
                         list.add(convertResponseItem(rest));
                     }
                     adapter.notifyItemChanged(0);
                 }));
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (PermissionUtil.hasSelfPermissions(this, GPS_PERMISSIONS)) {
-                dialogBuilder.create().show();
-            } else {
-                // 権限がない場合は、パーミッション確認アラートを表示する
-                requestPermissions(GPS_PERMISSIONS, GPS_REQUEST_CODE);
-            }
-        } else {
-            dialogBuilder.create().show();
-        }
-
+        dialogBuilder.create().show();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // アラート表示中に画面回転すると length ０でコールバックされるのでガードする
+        if (grantResults.length > 0 && requestCode == GPS_REQUEST_CODE) {
+            if (!PermissionUtil.checkGrantResults(grantResults)) {
+//                今後確認しないにチェックが入っているか確認
+                if (!PermissionUtil.shouldShowRequestPermissionRationale(this, permissions, grantResults)) {
+//                    今後確認しないにチェックが入っている場合
+                    PermissionUtil.showAlertDialog(getSupportFragmentManager());
+                }
+            } else {
+                sendBtnClick();
+            }
+        }
 
     }
 
@@ -130,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     private RestaurantItem convertResponseItem(SearchResponse.Rest rest) {
         RestaurantItem item = new RestaurantItem();
 //        空の場合はダミーurlに変更
+        String dummyImageUrl = "http://androck.jp/wp-content/uploads/file/apps/ICON/1/140.png";
         item.setImageUri(Objects.equals(rest.getImageUrl().getImageUrl1().toString(), "{}") ? dummyImageUrl : rest.getImageUrl().getImageUrl1().toString());
         item.setName(rest.getName());
         item.setTel(rest.getTel());
