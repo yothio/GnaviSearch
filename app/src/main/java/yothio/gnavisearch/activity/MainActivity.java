@@ -151,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
             item.setAccessStation(rest.getAccess().getStation().toString());
             item.setAccessWalk(rest.getAccess().getWalk().toString());
         }
+        item.setLatitude(Double.parseDouble(rest.getLatitude()));
+        item.setLongitude(Double.parseDouble(rest.getLongitude()));
+
         return item;
     }
 }

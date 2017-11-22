@@ -43,6 +43,10 @@ public class SearchResponse{
         Object budget;
         @SerializedName("access")
         Access access;
+        @SerializedName("latitude")
+        String latitude;
+        @SerializedName("longitude")
+        String longitude;
 
         @Getter
         @Setter
