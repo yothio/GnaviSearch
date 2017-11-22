@@ -32,9 +32,7 @@ public class RestaurantItem implements Parcelable {
     String accessStation;
 //    駅からの徒歩時間
     String accessWalk;
-//    緯度系ど
-    double latitude;
-    double longitude;
+
 
     public RestaurantItem(){
 
@@ -51,8 +49,6 @@ public class RestaurantItem implements Parcelable {
         accessLine = in.readString();
         accessStation = in.readString();
         accessWalk = in.readString();
-        latitude = in.readDouble();
-        longitude = in.readDouble();
     }
 
     public static final Creator<RestaurantItem> CREATOR = new Creator<RestaurantItem>() {
@@ -84,7 +80,5 @@ public class RestaurantItem implements Parcelable {
         parcel.writeString(accessLine);
         parcel.writeString(accessStation);
         parcel.writeString(accessWalk);
-        parcel.writeDouble(latitude);
-        parcel.writeDouble(longitude);
     }
 }
